@@ -24,6 +24,24 @@
  *
  * @return {String} отформатированная строка.
  */
+function format(token){
+	if (token.match(/\{\d\}/g)){
+		var found = token.match(/\{\d\}/g);
+		token = token.replace(/\{|\}/g, '');
+		if(found.length === arguments.length-1){
+			for(var i = 0, len = found.length;i<len;i++){
+				var p = Number(found[i][1]);
+				token = token.replace(p,arguments[p+1]);
+			}
+			return token;
+		}else{
+			throw new Error("Invalid arguments count");
+		}
+	}else{
+		return token;
+	}
+}
+
 
 /**
  * Задание 2. Создать функцию repeat.
@@ -44,6 +62,18 @@
  * @return {String} Строка с повотрениями.
  */
 
+function repeat(str, count, sep){
+	var array = []
+	for(var i = 0;i < count;i++){
+		array.push(str);
+	}
+	if(arguments.length>2){
+		return array.join(sep);
+	}else{
+		return array.join('');
+	}
+}
+
 /**
  * Задание 3. Создать функцию toGetParams, формирующую из
  * объекта строку параметров для GET-запроса.
@@ -56,7 +86,13 @@
  *
  * @return {String} строка параметров.
  */
-
+function toGetParams(obj){
+	var array=[];
+	for (var key in obj){
+		array.push(key+"="+obj[key]);
+	}
+	return array.join("&");
+}
 /**
  * Задание 4. Создать функцию formatUrl, формирующую из базового url и объекта
  * строку GET-запроса.
@@ -72,6 +108,10 @@
  *
  * @return {String} сформированный url.
  */
+
+function formatUrl(url, obj){
+	return url+"?"+toGetParams(obj);
+}
 
 /**
  * Задание 5. Создать функцию startsWith, возвращающая true, если строка, переданная
@@ -91,6 +131,16 @@
  * @return {Boolean} Результат проверки.
  */
 
+function startsWith(str, prefix){
+	var b = true;
+	for(var i = 0,len = prefix.length;i < len && b;i++){
+		if (str[i] !== prefix[i]){
+			b = false;
+		}
+	}
+	return b;
+}
+
 /**
  * Задание 6. Создать функцию endsWith, возвращающая true, если строка, переданная
  * в качестве первого аргумента оканчивается на строку, переданную в качестве второго аргумента,
@@ -108,3 +158,15 @@
  *
  * @return {Boolean} Результат проверки.
  */
+
+function endsWith(str, suffix){
+	var b = true;
+	var n = suffix.length - 1;
+	var n2 = str.length - n - 1;
+	for(var i = n;i >= 0;i--){
+		if (str[i+n2] !== suffix[i]){
+			b = false;
+		}
+	}
+	return b;
+}
